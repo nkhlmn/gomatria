@@ -12,20 +12,25 @@ func main() {
 		fmt.Println("Must provide an argument!")
 		os.Exit(1)
 	}
-	var wordArg = os.Args[1]
-	var gematria = getWord(wordArg)
-	var ciphers = []Cipher{
-		Ordinal,
-		FullReduction,
-		OrdinalReverse,
-		FullReductionReverse,
-	}
+	var arg = os.Args[1]
+	var isValid, err = validateWordString(&arg)
+	if (err != nil) {
+		fmt.Println(err)
+	} else if (isValid) {
+		var word = getWord(arg)
+		var ciphers = []Cipher{
+			Ordinal,
+			FullReduction,
+			OrdinalReverse,
+			FullReductionReverse,
+		}
 
-	wordDisplay := getWordDisplay(&gematria)
-	fmt.Println(wordDisplay)
-	seperator := strings.Repeat("-", len(wordDisplay))
-	fmt.Println(seperator)
-	for _, cipher := range ciphers {
-		fmt.Println(getWordValuesDisplay(&gematria, cipher))
+		wordDisplay := getWordDisplay(&word)
+		fmt.Println(wordDisplay)
+		seperator := strings.Repeat("-", len(wordDisplay))
+		fmt.Println(seperator)
+		for _, cipher := range ciphers {
+			fmt.Println(getWordValuesDisplay(&word, cipher))
+		}
 	}
 }

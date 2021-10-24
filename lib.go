@@ -3,7 +3,18 @@ package main
 import (
 	"fmt"
 	"unicode"
+	"regexp"
+	"errors"
 )
+
+func validateWordString(wordString *string) (bool, error) {
+	var isAlphaNumeric = regexp.MustCompile(`^[a-zA-Z0-9]*$`).MatchString(*wordString)
+	if (isAlphaNumeric) {
+		return true, nil
+	} else {
+		return false, errors.New("Args must only contain letters and numbers!")
+	}
+}
 
 func getWord(wordString string) Word {
 	var result = Word{
@@ -13,6 +24,9 @@ func getWord(wordString string) Word {
 }
 
 func getLetterValue(c *rune, cipherType Cipher) int {
+	if (unicode.IsDigit(*c)) {
+		return int(*c - '0')
+	}
 	char := unicode.ToLower(*c) - 96
 	var result int
 	switch cipherType {
