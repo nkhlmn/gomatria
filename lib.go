@@ -63,8 +63,9 @@ func getWordValue(word *Word, cipherType Cipher) int {
 func getWordDisplay(w *Word) string {
 	var result string
 	for _, char := range w.originalString {
-		result += fmt.Sprintf("%-5v", string(char))
+		result += fmt.Sprintf("%v\t", string(char))
 	}
+	// result += "\ttotal"
 	return result
 }
 
@@ -72,10 +73,10 @@ func getWordValuesDisplay(w *Word, cipherType Cipher) string {
 	var result string
 	for _, char := range w.originalString {
 		letterValue := getLetterValue(&char, cipherType)
-		result += fmt.Sprintf("%-5v", letterValue)
+		result += fmt.Sprintf("%v\t", letterValue)
 	}
 	result += fmt.Sprintf(
-		"(%v) %v",
+		"\t(%v) %v",
 		getWordValue(w, cipherType),
 		cipherType.String(),
 	)

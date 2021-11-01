@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"text/tabwriter"
 )
 
 func main() {
@@ -25,12 +26,22 @@ func main() {
 			FullReductionReverse,
 		}
 
+		// Initialize write to print columns
+		writer := tabwriter.NewWriter(os.Stdout, 3, 3, 1, ' ', tabwriter.AlignRight)
+
+		// Print the header (inidividual letters of the word)
 		wordDisplay := getWordDisplay(&word)
-		fmt.Println(wordDisplay)
-		seperator := strings.Repeat("-", len(wordDisplay))
-		fmt.Println(seperator)
+		fmt.Fprintln(writer, wordDisplay)
+
+		// Print a seperator
+		seperator := strings.Repeat("---\t", len(word.originalString))
+		fmt.Fprintln(writer, seperator)
+
+		// Print a row for each cipher
 		for _, cipher := range ciphers {
-			fmt.Println(getWordValuesDisplay(&word, cipher))
+			fmt.Fprintln(writer, getWordValuesDisplay(&word, cipher))
 		}
+
+		writer.Flush()
 	}
 }
