@@ -30,3 +30,11 @@ type Word struct {
 	valueDisplay   string
 }
 
+func (word Word) CipherValue(cipher Cipher) int {
+	return getWordValue(&word, cipher)
+}
+
+func (word Word) AudioSigil(cipher Cipher) string {
+	var res string = getAudioSigil(&word, Ordinal)
+	return res
+}

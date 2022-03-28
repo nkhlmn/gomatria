@@ -12,6 +12,14 @@ func main() {
 	if argsLength < 1 {
 		fmt.Println("Must provide an argument!")
 		os.Exit(1)
+	} else if argsLength > 1 {
+		var arg1 = os.Args[1]
+		var arg2 = os.Args[2]
+		if (arg1 == "-a" || arg1 == "--audio-sigil") {
+			var word = getWord(arg2)
+			fmt.Println(word.AudioSigil(Ordinal))
+			return
+		}
 	}
 	var arg = os.Args[1]
 	var isValid, err = validateWordString(&arg)

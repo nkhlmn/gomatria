@@ -5,6 +5,7 @@ import (
 	"unicode"
 	"regexp"
 	"errors"
+	"strings"
 )
 
 func validateWordString(wordString *string) (bool, error) {
@@ -51,6 +52,39 @@ func getLetterValue(c *rune, cipherType Cipher) int {
 	return result
 }
 
+func getAudioSigil(word *Word, cipherType Cipher) string {
+	var notes []string
+	for _, char := range word.originalString {
+		letterValue := getLetterValue(&char, cipherType)
+		letterNote := numberToNote(&letterValue)
+		notes = append(notes, letterNote)
+	}
+	return strings.Join(notes[:], " ")
+}
+
+func numberToNote(num *int) string {
+	var notes [12]string
+	useSharps := false
+	if useSharps {
+		notes = [12]string{"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"}
+	} else {
+		notes = [12]string{"C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B"}
+	}
+
+	octaveOffset := 1
+	octave := (*num / 12) + octaveOffset
+
+	var noteNumber int
+	if *num == 12 {
+		noteNumber = 12
+	} else {
+		noteNumber = *num % 12
+	}
+	note := notes[noteNumber - 1]
+
+	return fmt.Sprintf("%s%v", note, octave)
+}
+
 func getWordValue(word *Word, cipherType Cipher) int {
 	var value int
 	for _, char := range word.originalString {
@@ -65,7 +99,6 @@ func getWordDisplay(w *Word) string {
 	for _, char := range w.originalString {
 		result += fmt.Sprintf("%v\t", string(char))
 	}
-	// result += "\ttotal"
 	return result
 }
 
@@ -77,7 +110,7 @@ func getWordValuesDisplay(w *Word, cipherType Cipher) string {
 	}
 	result += fmt.Sprintf(
 		"\t(%v) %v",
-		getWordValue(w, cipherType),
+		w.CipherValue(cipherType),
 		cipherType.String(),
 	)
 	return result
